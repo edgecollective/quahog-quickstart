@@ -8,6 +8,8 @@ Attach the CP2104 programming cable to the Quahog on the programming pins.  Ther
 
 <img src="./pics/cable_diag.png" width=500>
 
+<img src="./pics/quahog_2.png" width=500>
+
 ## Transferring Files to/from Quahog
 
 ### Setting up ampy (file transfer utility)
