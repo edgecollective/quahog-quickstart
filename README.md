@@ -2,6 +2,10 @@
 
 The below documentation assumes a (recent?) verison of Ubuntu.
 
+## Attaching the programming cable
+
+<img src="./pics/cable_diag.png" width=300>
+
 ## Transferring Files to/from Quahog
 
 ### Setting up ampy (file transfer utility)
@@ -114,13 +118,13 @@ WIFI_NET = '[ESSID]'
 WIFI_PASSWORD = '[PASSWORD]'
 ```
 
-Now, upload the script to your Quahog
+Now, upload the script to your Quahog ('ampy' may require sudo):
 
 ``` 
 ampy -p /dev/ttyUSB0 put farmos_post_dht22.py
 ```
 
-Now we can 'screen' into the Quahog, and run our script to post values to FarmOS
+Now we can 'screen' into the Quahog, and run our script to post values to FarmOS ('screen' may require sudo):
 
 ``` 
 screen /dev/ttyUSB0 115200
