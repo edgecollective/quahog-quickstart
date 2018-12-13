@@ -6,6 +6,9 @@ import machine
 from machine import Pin
 from machine import SPI
 
+# set up the DHT22 temp + humidity sensor
+d = dht.DHT22(machine.Pin(18))
+
 # set up FARMOS params
 public_key='[PUBLIC KEY]'
 private_key='[PRIVATE KEY]'
@@ -14,13 +17,9 @@ private_key='[PRIVATE KEY]'
 WIFI_NET = '[ESSID]'
 WIFI_PASSWORD = '[PASSWORD]'
 
-# set up the DHT22 temp + humidity sensor
-d = dht.DHT22(machine.Pin(18))
-
 base_url='https://wolfesneck.farmos.net/farm/sensor/listener/'
 url = base_url+public_key+'?private_key='+private_key
 headers = {'Content-type':'application/json', 'Accept':'application/json'}
-
 
 # function for posting data
 def post_data():
@@ -53,24 +52,26 @@ index=0
 # main loop
 while True:
 
-	# make measurements from DHT22
-	d.measure()
-	t=d.temperature()
-	h=d.humidity()
-
-	# form the payload
-	payload ={"temp": t,"humidity":h}
-	print(payload)
-
-	# connect to network
-	do_connect()
-
-	# post the data
-	post_data()
-
-    print("Posted ["+str(index)+"].")
+    print ("iteration #"+str(index)+":")
     
-	index+=1
+    # make measurements from DHT22
+    d.measure()
+    t=d.temperature()
+    h=d.humidity()
 
-	time.sleep(5)
+    # form the payload
+    payload ={"temp": t,"humidity":h}
+    print(payload)
+
+    # connect to network
+    do_connect()
+
+    # post the data
+    post_data()
+
+    print("Posted!\n")
+
+    index+=1
+
+    time.sleep(5)
 
