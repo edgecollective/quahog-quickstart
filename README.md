@@ -6,7 +6,7 @@ The below documentation assumes a (recent?) verison of Ubuntu.
 
 Attach the CP2104 programming cable to the Quahog on the programming pins.  There are 7 pins on the Quahog; you want the (6-pin) CP2104 to connect to the 'lower' 6 pins on the Quahog's 7-pin port, with the 'top' of the CP2014 facing 'outward/right'.  See diagram:
 
-<img src="./pics/cable_diag.png" width=500>
+<img src="./pics/cable_diag.png" width=600>
 
 <img src="./pics/quahog_2.JPG" width=500>
 
