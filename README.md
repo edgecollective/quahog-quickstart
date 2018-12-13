@@ -4,7 +4,7 @@ The below documentation assumes a (recent?) verison of Ubuntu.
 
 ## Attaching the programming cable
 
-<img src="./pics/cable_diag.png" width=300>
+<img src="./pics/cable_diag.png" width=500>
 
 ## Transferring Files to/from Quahog
 
