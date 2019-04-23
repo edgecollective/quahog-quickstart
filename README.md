@@ -134,8 +134,7 @@ Now we can 'screen' into the Quahog, and run our script to post values to FarmOS
 screen /dev/ttyUSB0 115200
 >>> import farmos_post_dht22
 ```
-
-<img src="./pics/test_quahog_post.png" width=600">
+ 
 
 Note: if you would like this script to run automatically when the Quahog first powers on, copy it into a file called 'main.py', and put this on your board using ampy.
 

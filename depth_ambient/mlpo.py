@@ -11,15 +11,15 @@ import urequests as requests
 sec_interval=90
 
 # set up FARMOS params
-public_key='ebb4OB1GGqSzL8g4bPmzUm9864wo'
-private_key='2llaO9KWWwsmlXWaby2mFQPBveLD'
+public_key='9e854cf677302c41e069d21010d446af'
+private_key='f252a12a10446aa5aca878bbee50af22'
 
 # set up WIFI parameters
 WIFI_NET = 'Artisan\'s Asylum'
 WIFI_PASSWORD = 'learn.make.teach'
 
-base_url='http://142.93.123.71:8080/input/'
-get_url = base_url+public_key+'?private_key='+private_key
+base_url='https://wolfesneck.farmos.net/farm/sensor/listener/'
+url = base_url+public_key+'?private_key='+private_key
 headers = {'Content-type':'application/json', 'Accept':'application/json'}
 
 led=Pin(18,Pin.OUT)
@@ -27,13 +27,7 @@ led=Pin(18,Pin.OUT)
 wdi=Pin(22,Pin.OUT)
 
 
-def get_data(url):
-    try:
-    	r = requests.get(url)
-    except Exception as e:
-	    print(e)
-    else:
-	    r.close()    
+
 
 # function for posting data
 def post_data():
@@ -81,9 +75,6 @@ oled = ssd1306.SSD1306_I2C(128, 64, i2c)
 bme=bme280.BME280(i2c=i2c)
 
 
-#time.sleep(3)
-            
-
 
 
 posted=False
@@ -96,6 +87,7 @@ while (posted==False):
         #print(a)
         
         try:
+        
         
             bme280_params=bme.values
             #print(bme280_params)
@@ -133,15 +125,14 @@ while (posted==False):
 
             
             print('post!')
-            full_get_url=get_url+"&dp="+str(depth_m)+"&ha="+str(ha)+"&pa="+str(pa)+"&pp="+str(pp)+"&ta="+str(ta)+"&tp="+str(tp)
-            #payload ={"ta": ta,"pa":pa,"ha":ha,"tp":tp,"pp":pp,"dp":depth_m}
-            print(full_get_url)
+            payload ={"ta": ta,"pa":pa,"ha":ha,"tp":tp,"pp":pp,"dp":depth_m}
+            print(payload)
             
             # connect to network
             do_connect()
 
             # post the data
-            get_data(full_get_url)
+            post_data()
             posted=True
             led.value(True) 
             
@@ -152,9 +143,6 @@ while (posted==False):
         
         except Exception as e:
             print(e)
-            # pulse wdi pin
-            wdi.value(True)
-            wdi.value(False)
             
         led.value(False)
 

@@ -81,9 +81,6 @@ oled = ssd1306.SSD1306_I2C(128, 64, i2c)
 bme=bme280.BME280(i2c=i2c)
 
 
-#time.sleep(3)
-            
-
 
 
 posted=False
@@ -96,6 +93,7 @@ while (posted==False):
         #print(a)
         
         try:
+        
         
             bme280_params=bme.values
             #print(bme280_params)

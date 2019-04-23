@@ -67,7 +67,7 @@ baudrate=1200
 
 y_start=0
 
-uart = UART(1, baudrate=baudrate,rx=19,tx=21,timeout=10)
+
 
 index=0
 g=10 # m/s^2
@@ -80,11 +80,14 @@ i2c = I2C(-1, Pin(14), Pin(2))
 oled = ssd1306.SSD1306_I2C(128, 64, i2c)
 bme=bme280.BME280(i2c=i2c)
 
+oled.fill(0)
+oled.text("warming up ...",0,0)
+oled.show()
 
-#time.sleep(3)
+time.sleep(3)
             
 
-
+uart = UART(1, baudrate=baudrate,rx=19,tx=21,timeout=10)
 
 posted=False
 

@@ -13,8 +13,6 @@ uart = UART(1, baudrate=baudrate,rx=19,tx=21,timeout=10)
 index=0
 
 # set up the display
-# i2c == (scl,sda)
-
 i2c = I2C(-1, Pin(14), Pin(2))
 oled = ssd1306.SSD1306_I2C(128, 64, i2c)
 
