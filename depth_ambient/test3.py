@@ -1,5 +1,4 @@
 from machine import UART
-import machine
 import time
 import ssd1306
 from machine import I2C
@@ -27,8 +26,6 @@ led=Pin(18,Pin.OUT)
 
 wdi=Pin(22,Pin.OUT)
 
-adc_pin=machine.Pin(34)
-adc=machine.ADC(adc_pin)
 
 def get_data(url):
     try:
@@ -82,6 +79,7 @@ rho=997 # kg/m^3
 
 i2c = I2C(-1, Pin(14), Pin(2))
 oled = ssd1306.SSD1306_I2C(128, 64, i2c)
+bme=bme280.BME280(i2c=i2c)
 
 
 #time.sleep(3)
@@ -101,10 +99,11 @@ while (posted==False):
         
         try:
         
+            bme280_params=bme.values
             #print(bme280_params)
-            ta=23.3
-            pa=23.3
-            ha=23.3
+            ta=float(bme280_params[0])
+            pa=float(bme280_params[1])
+            ha=float(bme280_params[2])
             
             oled.fill(0)
             oled.text("ta: "+str(ta)+" C",0,0)
@@ -119,7 +118,7 @@ while (posted==False):
             #tp=float(params[0])
             #pp=float(params[1])
             
-            tp=adc.read()
+            tp=20.
             pp=1000.
             
             oled.text("tp: "+str(tp)+" C",0,30)
@@ -146,18 +145,12 @@ while (posted==False):
             
             # connect to network
             do_connect()
-            oled.fill(0)
-            oled.text('connected ...',0,0)
-            oled.show()
 
             # post the data
             result=get_data(full_get_url)
-            oled.fill(0)
-            oled.text('get ...',0,0)
-            oled.show()
-
             print(result.status_code)
             posted=True
+            led.value(True) 
             time.sleep(1)
             oled.fill(0)
             oled.text('posted!',0,0)
@@ -173,11 +166,9 @@ while (posted==False):
         
         except Exception as e:
             print(e)
-            oled.fill(0)
-            oled.text(str(e),0,0)
-            oled.show()
             # pulse wdi pin
-            #wdi.value(True)
-            #wdi.value(False)
+            wdi.value(True)
+            wdi.value(False)
             
+        led.value(False)
 

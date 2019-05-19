@@ -1,5 +1,4 @@
 from machine import UART
-import machine
 import time
 import ssd1306
 from machine import I2C
@@ -27,13 +26,10 @@ led=Pin(18,Pin.OUT)
 
 wdi=Pin(22,Pin.OUT)
 
-adc_pin=machine.Pin(34)
-adc=machine.ADC(adc_pin)
 
 def get_data(url):
     try:
     	r = requests.get(url)
-        return r
     except Exception as e:
 	    print(e)
     else:
@@ -82,6 +78,7 @@ rho=997 # kg/m^3
 
 i2c = I2C(-1, Pin(14), Pin(2))
 oled = ssd1306.SSD1306_I2C(128, 64, i2c)
+bme=bme280.BME280(i2c=i2c)
 
 
 #time.sleep(3)
@@ -95,16 +92,16 @@ while (posted==False):
     
     
     a=uart.readline()
-    a='hello'
     if (a!=None):
         #print(a)
         
         try:
         
+            bme280_params=bme.values
             #print(bme280_params)
-            ta=23.3
-            pa=23.3
-            ha=23.3
+            ta=float(bme280_params[0])
+            pa=float(bme280_params[1])
+            ha=float(bme280_params[2])
             
             oled.fill(0)
             oled.text("ta: "+str(ta)+" C",0,0)
@@ -113,14 +110,14 @@ while (posted==False):
             ha_string="ha: %.2f" % ha
             oled.text(ha_string,0,20)
             
-            #packet_text = str(a, 'ascii')
-            #params=packet_text.strip().split(',')
+            packet_text = str(a, 'ascii')
+            #print(packet_text)
+            params=packet_text.strip().split(',')
+            #print(params)
             
-            #tp=float(params[0])
-            #pp=float(params[1])
+            tp=float(params[0])
+            pp=float(params[1])
             
-            tp=adc.read()
-            pp=1000.
             
             oled.text("tp: "+str(tp)+" C",0,30)
             oled.text("pp: "+str(pp)+ " mbar",0,40)
@@ -134,11 +131,7 @@ while (posted==False):
             if (depth_m>0.):
                 print(depth_m)
 
-            time.sleep(3)
-            oled.fill(0)
-            oled.text('now post ...',0,0)
-            oled.show()
-            time.sleep(1)
+            
             print('post!')
             full_get_url=get_url+"&dp="+str(depth_m)+"&ha="+str(ha)+"&pa="+str(pa)+"&pp="+str(pp)+"&ta="+str(ta)+"&tp="+str(tp)
             #payload ={"ta": ta,"pa":pa,"ha":ha,"tp":tp,"pp":pp,"dp":depth_m}
@@ -146,26 +139,12 @@ while (posted==False):
             
             # connect to network
             do_connect()
-            oled.fill(0)
-            oled.text('connected ...',0,0)
-            oled.show()
 
             # post the data
-            result=get_data(full_get_url)
-            oled.fill(0)
-            oled.text('get ...',0,0)
-            oled.show()
-
-            print(result.status_code)
+            get_data(full_get_url)
             posted=True
-            time.sleep(1)
-            oled.fill(0)
-            oled.text('posted!',0,0)
-            oled.show()
-            time.sleep(1)
-            oled.text('sleeping...',0,20)
-            oled.show()
-            time.sleep(1)
+            led.value(True) 
+            
             # pulse wdi pin
             wdi.value(True)
             wdi.value(False)                
@@ -173,11 +152,10 @@ while (posted==False):
         
         except Exception as e:
             print(e)
-            oled.fill(0)
-            oled.text(str(e),0,0)
-            oled.show()
             # pulse wdi pin
-            #wdi.value(True)
-            #wdi.value(False)
+            wdi.value(True)
+            wdi.value(False)
             
+        led.value(False)
 
+        
