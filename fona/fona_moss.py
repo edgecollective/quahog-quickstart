@@ -3,12 +3,16 @@ import time
 from machine import Pin
 import gc
 
+print("sleeping for 5 sec")
+time.sleep(5)
+
 baudrate=9600
 #baudrate=57600
 
 # sensor data + url
-url_base="http://142.93.123.71:8080/input/MjYYakyDzvs6amYM8qB6SPa3lAdv?private_key=Eq44LVm8BesGXlnZ3m2GFv6RBbpe"
-temp=3.16
+url_base="http://mosspig.club/input/dVlKyQD6pehDgNjjXlNxC2rOd9d?private_key=eQd7OyXp5gInDq00QeqgCy9M2b2"
+
+temp=20.5
 url_full=url_base+"&temp="+str(temp)
 print(url_full)
 
@@ -56,7 +60,7 @@ print(uart.readline())
 
 #uart.write("AT+HTTPPARA=\"URL\",\"https://en93klhmkdkf5.x.pipedream.net\"\r")
 #uart.write("AT+HTTPPARA=\"URL\",\"http://mosspig.club\"\r")
-uart.write("AT+HTTPPARA=\"URL\",\"http://mosspig.club/input/6VwqbJMboOSq2rvvMEryHOozj8j?private_key=mGDzv6QvplIVw0qqvY0zFXd2vDv&moisture=11.36&temp=26.02\"\r")
+uart.write("AT+HTTPPARA=\"URL\",\""+url_full+"\"\r")
 
 time.sleep(1)
 print(uart.readline())
